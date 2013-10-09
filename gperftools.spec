@@ -257,7 +257,7 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 * Mon Apr 23 2007 Tom "spot" Callaway <tcallawa@redhat.com> 0.91-1
 - alright, lets see if this works now.
 
-* Wed Oct 13 2005 Tom "spot" Callaway <tcallawa@redhat.com> 0.3-2
+* Thu Oct 13 2005 Tom "spot" Callaway <tcallawa@redhat.com> 0.3-2
 - change group to Development/Tools
 
 * Mon Oct 10 2005 Tom "spot" Callaway <tcallawa@redhat.com> 0.3-1
