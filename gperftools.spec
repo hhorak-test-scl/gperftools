@@ -5,7 +5,7 @@
 
 Name:		%{?scl_prefix}gperftools
 Version:	2.0
-Release:	11%{?dist}
+Release:	12%{?dist}
 License:	BSD
 Group:		Development/Tools
 Summary:	Very fast malloc and performance analysis tools
@@ -109,6 +109,9 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 %{_libdir}/*.so.*
 
 %changelog
+* Thu Oct 10 2013 Honza Horak <hhorak@redhat.com> - 2.0-12
+- Release bump for rebuilding
+
 * Sun May  5 2013 Honza Horak <hhorak@redhat.com> - 2.0-11
 - Add support for software collections
 
