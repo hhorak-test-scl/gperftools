@@ -5,7 +5,7 @@
 
 Name:		%{?scl_prefix}gperftools
 Version:	2.0
-Release:	12%{?dist}
+Release:	13%{?dist}
 License:	BSD
 Group:		Development/Tools
 Summary:	Very fast malloc and performance analysis tools
@@ -26,26 +26,26 @@ high-performance multi-threaded malloc() implementation that works
 particularly well with threads and STL, a thread-friendly heap-checker,
 a heap profiler, and a cpu-profiler.
 
-%package devel
+%package -n %{scl}-%{pkg_name}-devel
 Summary:	Development libraries and headers for gperftools
 Group:		Development/Libraries
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
-%description devel
+%description -n %{scl}-%{pkg_name}-devel
 Libraries and headers for developing applications that use gperftools.
 
-%package libs
+%package -n %{scl}-%{pkg_name}-libs
 Summary:	Libraries provided by gperftools
 
-%description libs
+%description -n %{scl}-%{pkg_name}-libs
 Libraries provided by gperftools, including libtcmalloc and libprofiler.
 
-%package -n pprof
+%package -n %{scl}-%{pkg_name}-pprof
 Summary:	CPU and Heap Profiler tool
 Requires:	gv, graphviz
 BuildArch:	noarch
 
-%description -n pprof 
+%description -n %{scl}-%{pkg_name}-pprof
 Pprof is a heap and CPU profiler tool, part of the gperftools suite.
 
 %prep
@@ -61,7 +61,7 @@ chmod -x src/sampler.h src/sampler.cc
 %build
 CXXFLAGS=`echo $RPM_OPT_FLAGS -DTCMALLOC_LARGE_PAGES| sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g'`
 %{?scl:scl enable %{scl} - << "EOF"}
-%configure --disable-static 
+%configure --disable-static
 %{?scl:EOF}
 
 # Bad rpath!
@@ -69,7 +69,7 @@ CXXFLAGS=`echo $RPM_OPT_FLAGS -DTCMALLOC_LARGE_PAGES| sed -e 's/-Wp,-D_FORTIFY_S
 #sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 # Can't build with smp_mflags
 %{?scl:scl enable %{scl} - << "EOF"}
-make 
+make
 %{?scl:EOF}
 
 %install
@@ -91,24 +91,27 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 # LD_LIBRARY_PATH=./.libs make check
 %endif
 
-%post libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post   -n %{scl}-%{pkg_name}-libs -p /sbin/ldconfig
+%postun -n %{scl}-%{pkg_name}-libs -p /sbin/ldconfig
 
-%files -n pprof
+%files -n %{scl}-%{pkg_name}-pprof
 %{_bindir}/pprof
 %{_mandir}/man1/*
 
-%files devel
+%files -n %{scl}-%{pkg_name}-devel
 %{_docdir}/%{name}-%{version}/
 %{_includedir}/google/
 %{_includedir}/gperftools/
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
 
-%files libs
+%files -n %{scl}-%{pkg_name}-libs
 %{_libdir}/*.so.*
 
 %changelog
+* Fri Dec 13 2013 Jan Pacner <jpacner@redhat.com> - 2.0-13
+- Resolves: #1039927
+
 * Thu Oct 10 2013 Honza Horak <hhorak@redhat.com> - 2.0-12
 - Release bump for rebuilding
 
