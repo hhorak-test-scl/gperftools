@@ -5,7 +5,7 @@
 
 Name:		%{?scl_prefix}gperftools
 Version:	2.0
-Release:	13%{?dist}
+Release:	14%{?dist}
 License:	BSD
 Group:		Development/Tools
 Summary:	Very fast malloc and performance analysis tools
@@ -59,7 +59,7 @@ sed -i 's/\r//' README_windows.txt
 chmod -x src/sampler.h src/sampler.cc
 
 %build
-CXXFLAGS=`echo $RPM_OPT_FLAGS -DTCMALLOC_LARGE_PAGES| sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g'`
+CXXFLAGS=$(echo $RPM_OPT_FLAGS -DTCMALLOC_LARGE_PAGES | { sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g'; echo ' -fno-strict-aliasing'; })
 %{?scl:scl enable %{scl} - << "EOF"}
 %configure --disable-static
 %{?scl:EOF}
@@ -109,6 +109,9 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 %{_libdir}/*.so.*
 
 %changelog
+* Wed Dec 18 2013 Jan Pacner <jpacner@redhat.com> - 2.0-14
+- Resolves: #1035187 (disable checks about breaking strict-aliasing rules)
+
 * Fri Dec 13 2013 Jan Pacner <jpacner@redhat.com> - 2.0-13
 - Resolves: #1039927
 
