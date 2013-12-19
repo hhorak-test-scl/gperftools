@@ -26,26 +26,26 @@ high-performance multi-threaded malloc() implementation that works
 particularly well with threads and STL, a thread-friendly heap-checker,
 a heap profiler, and a cpu-profiler.
 
-%package -n %{scl}-%{pkg_name}-devel
+%package -n %{?scl_prefix}%{pkg_name}-devel
 Summary:	Development libraries and headers for gperftools
 Group:		Development/Libraries
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
-%description -n %{scl}-%{pkg_name}-devel
+%description -n %{?scl_prefix}%{pkg_name}-devel
 Libraries and headers for developing applications that use gperftools.
 
-%package -n %{scl}-%{pkg_name}-libs
+%package -n %{?scl_prefix}%{pkg_name}-libs
 Summary:	Libraries provided by gperftools
 
-%description -n %{scl}-%{pkg_name}-libs
+%description -n %{?scl_prefix}%{pkg_name}-libs
 Libraries provided by gperftools, including libtcmalloc and libprofiler.
 
-%package -n %{scl}-%{pkg_name}-pprof
+%package -n %{?scl_prefix}%{pkg_name}-pprof
 Summary:	CPU and Heap Profiler tool
 Requires:	gv, graphviz
 BuildArch:	noarch
 
-%description -n %{scl}-%{pkg_name}-pprof
+%description -n %{?scl_prefix}%{pkg_name}-pprof
 Pprof is a heap and CPU profiler tool, part of the gperftools suite.
 
 %prep
@@ -59,7 +59,7 @@ sed -i 's/\r//' README_windows.txt
 chmod -x src/sampler.h src/sampler.cc
 
 %build
-CXXFLAGS=$(echo $RPM_OPT_FLAGS -DTCMALLOC_LARGE_PAGES | { sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g'; echo ' -fno-strict-aliasing'; })
+CXXFLAGS=$(echo $RPM_OPT_FLAGS -DTCMALLOC_LARGE_PAGES -fno-strict-aliasing | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g')
 %{?scl:scl enable %{scl} - << "EOF"}
 %configure --disable-static
 %{?scl:EOF}
@@ -91,21 +91,21 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 # LD_LIBRARY_PATH=./.libs make check
 %endif
 
-%post   -n %{scl}-%{pkg_name}-libs -p /sbin/ldconfig
-%postun -n %{scl}-%{pkg_name}-libs -p /sbin/ldconfig
+%post   -n %{?scl_prefix}%{pkg_name}-libs -p /sbin/ldconfig
+%postun -n %{?scl_prefix}%{pkg_name}-libs -p /sbin/ldconfig
 
-%files -n %{scl}-%{pkg_name}-pprof
+%files -n %{?scl_prefix}%{pkg_name}-pprof
 %{_bindir}/pprof
 %{_mandir}/man1/*
 
-%files -n %{scl}-%{pkg_name}-devel
+%files -n %{?scl_prefix}%{pkg_name}-devel
 %{_docdir}/%{name}-%{version}/
 %{_includedir}/google/
 %{_includedir}/gperftools/
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
 
-%files -n %{scl}-%{pkg_name}-libs
+%files -n %{?scl_prefix}%{pkg_name}-libs
 %{_libdir}/*.so.*
 
 %changelog
