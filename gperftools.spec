@@ -59,14 +59,15 @@ sed -i 's/\r//' README_windows.txt
 chmod -x src/sampler.h src/sampler.cc
 
 %build
-LDFLAGS=$(echo $RPM_OPT_FLAGS -fno-strict-aliasing -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g')
+CFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's|-fexceptions||g'`
+CXXFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's|-fexceptions||g'`
 %{?scl:scl enable %{scl} - << "EOF"}
 %configure --disable-static
 %{?scl:EOF}
 
 # Bad rpath!
-#sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-#sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 # Can't build with smp_mflags
 %{?scl:scl enable %{scl} - << "EOF"}
 make
