@@ -59,9 +59,10 @@ sed -i 's/\r//' README_windows.txt
 chmod -x src/sampler.h src/sampler.cc
 
 %build
+%{?scl:scl enable %{scl} - << "EOF"}
 CFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's|-fexceptions||g'`
 CXXFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's|-fexceptions||g'`
-%{?scl:scl enable %{scl} - << "EOF"}
+LDFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's|-fexceptions||g'`
 %configure --disable-static
 %{?scl:EOF}
 
