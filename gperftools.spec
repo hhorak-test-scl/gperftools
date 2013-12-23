@@ -59,7 +59,8 @@ sed -i 's/\r//' README_windows.txt
 chmod -x src/sampler.h src/sampler.cc
 
 %build
-CXXFLAGS=$(echo $RPM_OPT_FLAGS -DTCMALLOC_LARGE_PAGES -fno-strict-aliasing | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g')
+CFLAGS=$(echo $RPM_OPT_FLAGS -fno-strict-aliasing -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g')
+CXXFLAGS=$(echo $RPM_OPT_FLAGS -fno-strict-aliasing -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g')
 %{?scl:scl enable %{scl} - << "EOF"}
 %configure --disable-static
 %{?scl:EOF}
