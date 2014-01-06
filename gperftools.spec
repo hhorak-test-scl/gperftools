@@ -5,7 +5,7 @@
 
 Name:		%{?scl_prefix}gperftools
 Version:	2.0
-Release:	15%{?dist}
+Release:	16%{?dist}
 License:	BSD
 Group:		Development/Tools
 Summary:	Very fast malloc and performance analysis tools
@@ -61,8 +61,8 @@ chmod -x src/sampler.h src/sampler.cc
 %build
 %{?scl:scl enable %{scl} - << "EOF"}
 # fix strict-aliasing issues (see https://bugzilla.redhat.com/show_bug.cgi?id=1035187)
-CFLAGS="$CFLAGS -fno-strict-aliasing"
-CXXFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's|-fexceptions||g'`
+CFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's|-fexceptions||g'`
+CXXFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's|-fexceptions||g'`
 %configure --disable-static
 %{?scl:EOF}
 
@@ -111,6 +111,10 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 %{_libdir}/*.so.*
 
 %changelog
+* Mon Jan 06 2014 Jan Pacner <jpacner@redhat.com> - 2.0-16
+- Related: #1035187 (disable checks about breaking strict-aliasing rules)
+- revert the previous restoration and allow fortifying symbols
+
 * Thu Jan  2 2014 Honza Horak <hhorak@redhat.com> - 2.0-15
 - Restore changes done bellow except turning off strict-aliasing
   Related: #1035187
