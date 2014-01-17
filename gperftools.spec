@@ -5,7 +5,7 @@
 
 Name:		%{?scl_prefix}gperftools
 Version:	2.0
-Release:	16%{?dist}
+Release:	17%{?dist}
 License:	BSD
 Group:		Development/Tools
 Summary:	Very fast malloc and performance analysis tools
@@ -51,12 +51,12 @@ Pprof is a heap and CPU profiler tool, part of the gperftools suite.
 %prep
 %setup -q -n %{pkg_name}-%{version}
 %patch0 -p1 -b .svn-r190
-
 # Fix end-of-line encoding
 sed -i 's/\r//' README_windows.txt
-
 # No need to have exec permissions on source code
 chmod -x src/sampler.h src/sampler.cc
+# make libtool able to handle soname in format sclname-1
+sed -i -r 's|(major=\.)(\$func_arith_result)|\1$verstring_prefix\2|' ltmain.sh
 
 %build
 %{?scl:scl enable %{scl} - << "EOF"}
@@ -111,6 +111,9 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 %{_libdir}/*.so.*
 
 %changelog
+* Fri Jan 17 2014 Jan Pacner <jpacner@redhat.com> - 2.0-17
+- Related: RHBZ#1042874 (non-namespaced RPM provides and libraries)
+
 * Mon Jan 06 2014 Jan Pacner <jpacner@redhat.com> - 2.0-16
 - Related: #1035187 (disable checks about breaking strict-aliasing rules)
 - revert the previous restoration and allow fortifying symbols
