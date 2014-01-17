@@ -64,7 +64,6 @@ sed -i -r 's|(major=\.)(\$func_arith_result)|\1$verstring_prefix\2|' ltmain.sh
 CFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's|-fexceptions||g'`
 CXXFLAGS=`echo $RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -DTCMALLOC_LARGE_PAGES | sed -e 's|-fexceptions||g'`
 %configure --disable-static
-export verstring_prefix="%{scl_prefix}"
 %{?scl:EOF}
 
 # Bad rpath!
@@ -72,6 +71,7 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 # Can't build with smp_mflags
 %{?scl:scl enable %{scl} - << "EOF"}
+export verstring_prefix="%{scl_prefix}"
 make
 %{?scl:EOF}
 
