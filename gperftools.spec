@@ -5,7 +5,7 @@
 
 Name:		%{?scl_prefix}gperftools
 Version:	2.0
-Release:	17%{?dist}
+Release:	18%{?dist}
 License:	BSD
 Group:		Development/Tools
 Summary:	Very fast malloc and performance analysis tools
@@ -112,6 +112,10 @@ rm -rf %{buildroot}%{_docdir}/%{pkg_name}-%{version}/INSTALL
 %{_libdir}/*.so.*
 
 %changelog
+* Mon Feb 17 2014 Honza Horak <hhorak@redhat.com> - 2.0-18
+- Rebase due libunwind soname prefix
+  Related: #1042874
+
 * Fri Jan 17 2014 Jan Pacner <jpacner@redhat.com> - 2.0-17
 - Related: RHBZ#1042874 (non-namespaced RPM provides and libraries)
 
